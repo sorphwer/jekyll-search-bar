@@ -1,60 +1,81 @@
+function searchBarHtml() {
+    return `<div class="cb-search-tool" style="position: fixed; top: 0px ; bottom: 0px; left: 0px; right:  0px;
+    opacity: 0.95; background-color: #111111; z-index: 9999; display: none;">
+  <div id="searchbar" style="height: 60px;" class="d-flex justify-content-center">
+      <div id="scrollable-dropdown-menu">
+          <input class="typeahead tt-input" type="text" id="cb-search-content" placeholder="Enter search text"
+              autocomplete="on" spellcheck="on" dir="auto">
+      </div>
+  </div>
 
-    const substringMatcher = function (strs) {
-        return function findMatches(q, cb) {
-            let matches, substringRegex;
+  <div style="position: fixed; top: 16px; right: 16px;">
+      <img src="https://riino.site/jekyll-search-bar/search/img/cb-close.png" id="cb-close-btn" />
+  </div>
+</div>
 
-            // an array that will be populated with substring matches
-            matches = [];
+<div style="position: fixed; right: 16px; bottom: 20px;">
+  <img src="https://riino.site/jekyll-search-bar/search/img/cb-search.png" id="cb-search-btn" title="Try Double Click Ctrl" />
+</div>
 
-            // regex used to determine if a string contains the substring `q`
-            substrRegex = new RegExp(q, 'i');
 
-            // iterate through the pool of strings and for any string that
-            // contains the substring `q`, add it to the `matches` array
-            $.each(strs, function (i, str) {
-                if (substrRegex.test(str.title)) {
-                    matches.push(str);
-                }
+    `
+}
+const substringMatcher = function (strs) {
+    return function findMatches(q, cb) {
+        let matches, substringRegex;
 
-            });
+        // an array that will be populated with substring matches
+        matches = [];
 
-            cb(matches);
-        };
+        // regex used to determine if a string contains the substring `q`
+        substrRegex = new RegExp(q, 'i');
+
+        // iterate through the pool of strings and for any string that
+        // contains the substring `q`, add it to the `matches` array
+        $.each(strs, function (i, str) {
+            if (substrRegex.test(str.title)) {
+                matches.push(str);
+            }
+
+        });
+
+        cb(matches);
     };
-    const fuzzystringMatcher = function (strs) {
-        return function findMatches(q, cb) {
-            let matches, substringRegex;
-            ngram = FuzzySet(strs, false);
-            // an array that will be populated with substring matches
-            matches = [];
+};
+const fuzzystringMatcher = function (strs) {
+    return function findMatches(q, cb) {
+        let matches, substringRegex;
+        ngram = FuzzySet(strs, false);
+        // an array that will be populated with substring matches
+        matches = [];
 
-            // regex used to determine if a string contains the substring `q`
-            substrRegex = new RegExp(q, 'i');
+        // regex used to determine if a string contains the substring `q`
+        substrRegex = new RegExp(q, 'i');
 
-            // iterate through the pool of strings and for any string that
-            // contains the substring `q`, add it to the `matches` array
-            $.each(strs, function (i, str) {
-                if (substrRegex.test(str)) {
-                    matches.push(str);
-                }
-            });
-            // match any similar words in ngram set compared with `q`
-            if (q.length > 3) {
-                ngramSet = ngram.get(q)
-                for (let i in ngramSet) {
-                    if (ngramSet[i][0] > 0.5) {
-                        if ($.inArray(ngramSet[i][1], matches) === -1) {
-                            matches.push(ngramSet[i][1]);
-                        }
+        // iterate through the pool of strings and for any string that
+        // contains the substring `q`, add it to the `matches` array
+        $.each(strs, function (i, str) {
+            if (substrRegex.test(str)) {
+                matches.push(str);
+            }
+        });
+        // match any similar words in ngram set compared with `q`
+        if (q.length > 3) {
+            ngramSet = ngram.get(q)
+            for (let i in ngramSet) {
+                if (ngramSet[i][0] > 0.5) {
+                    if ($.inArray(ngramSet[i][1], matches) === -1) {
+                        matches.push(ngramSet[i][1]);
                     }
                 }
             }
+        }
 
-            cb(matches);
-        };
+        cb(matches);
     };
-    function assembleArtilce(articleProps) {
-        return `<section class="js-fadein js-fadein-anime">
+};
+function assembleArtilce(articleProps) {
+    return `<section class="js-fadein js-fadein-anime">
                 <div class="home-message__ttl"><a href="/${articleProps.id}/">
                     <h2> +${articleProps.title}</h2>
                     <!--<div class="post-content-preview">
@@ -67,65 +88,65 @@
                 </p>
             </section>`
 
+}
+function generateTagButton(tagName) {
+    return `<a href="/archive/?tag=${tagName}" data-sort="0008" data-encode="${tagName}" class="tag" title="${tagName}" rel="1">${tagName}</a>`
+}
+function updateTypehead(data) {
+    let tagList = Array();
+    for (post of data) {
+        tags = post['tags'].split('_');
+        tagList = tagList.concat(tags);
     }
-    function generateTagButton(tagName) {
-        return `<a href="/archive/?tag=${tagName}" data-sort="0008" data-encode="${tagName}" class="tag" title="${tagName}" rel="1">${tagName}</a>`
-    }
-    function updateTypehead(data) {
-        let tagList = Array();
-        for(post of data){
-            tags = post['tags'].split('_');
-            tagList = tagList.concat(tags);
-        }
-        $("#cb-search-content").typeahead(
-            {
-                hint: true,
-                highlight: true,
-                minLength: 1
-            },
-            {
-                name: 'data',
-                display: 'title',
-                source: substringMatcher(data),
-                templates: {
-                    header: '<h4 class="row-name">Article</h4>',
-                    // empty: [
-                    //     '<div class="text">',
-                    //     'unable to find any data that match the current query',
-                    //     '</div>'
-                    // ].join('\n'),
-                    suggestion: function (data) {
-                        tags = data.tags.split('_');
-                        tagHTML = '';
-                        for (let i in tags) {
-                            tagHTML += generateTagButton(tags[i]);
-                        }
-                        return '<div class="typehead-list d-flex justify-content-between align-items-end"><a class="article" href="' + data.url + '">' + data.title + '</a><div class="d-flex flex-row">' + tagHTML + '</div></div>';
+    $("#cb-search-content").typeahead(
+        {
+            hint: true,
+            highlight: true,
+            minLength: 1
+        },
+        {
+            name: 'data',
+            display: 'title',
+            source: substringMatcher(data),
+            templates: {
+                header: '<h4 class="row-name">Article</h4>',
+                // empty: [
+                //     '<div class="text">',
+                //     'unable to find any data that match the current query',
+                //     '</div>'
+                // ].join('\n'),
+                suggestion: function (data) {
+                    tags = data.tags.split('_');
+                    tagHTML = '';
+                    for (let i in tags) {
+                        tagHTML += generateTagButton(tags[i]);
                     }
-                },
+                    return '<div class="typehead-list d-flex justify-content-between align-items-end"><a class="article" href="' + data.url + '">' + data.title + '</a><div class="d-flex flex-row">' + tagHTML + '</div></div>';
+                }
             },
-            {
-                name: 'data',
-                source: fuzzystringMatcher(tagList),
-                templates: {
-                    header: '<h4 class="row-name">Tags</h4>',
-                    suggestion: function (data) {
-                        // for (let i in tags) {
-                        //     tagHTML += generateTagButton(tags[i]);
-                        // }
-                        return generateTagButton(data);
-                    }
+        },
+        {
+            name: 'data',
+            source: fuzzystringMatcher(tagList),
+            templates: {
+                header: '<h4 class="row-name">Tags</h4>',
+                suggestion: function (data) {
+                    // for (let i in tags) {
+                    //     tagHTML += generateTagButton(tags[i]);
+                    // }
+                    return generateTagButton(data);
                 }
             }
-        );
-    }
-    $(document).ready(function () {
-        // $Tags = getTags();
-        // $Authors = getAuthors();
-        $("#noResult").hide();
-        $('.tt-meanu').css('backdrop-filter', 'blur(9px)');
+        }
+    );
+}
+$(document).ready(function () {
+    // $Tags = getTags();
+    // $Authors = getAuthors();
+    $("#noResult").hide();
+    $('.tt-meanu').css('backdrop-filter', 'blur(9px)');
 
-        $(document).keyup(function (e) {
+    $(document).keyup(function (e) {
         let time2 = new Date().getTime();
         if (e.keyCode == 17) {
             let gap = time2 - time1;
@@ -183,15 +204,15 @@
         time1 = 0;
     });
 
-        $.ajax({
-            type: "GET",
-            url: "/search.json",
-            success: function (result) {
-                updateTypehead(result.data);
-            },
-            error: function (xhr, state, errorThrown) {
-                console.log(state);
-                console.log(errorThrown);
-            }
-        })
-    });
+    $.ajax({
+        type: "GET",
+        url: "/search.json",
+        success: function (result) {
+            updateTypehead(result.data);
+        },
+        error: function (xhr, state, errorThrown) {
+            console.log(state);
+            console.log(errorThrown);
+        }
+    })
+});
