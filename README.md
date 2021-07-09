@@ -55,7 +55,7 @@ Copy these code into your jekyll html page (if use riino.site source)
 <script type="text/javascript" src='https://riino.site/jekyll-search-bar/search/js/typeahead.bundle.js'></script>
 <script type="text/javascript" src='https://riino.site/jekyll-search-bar/search/js/fuzzyset.js'></script>
 <script type="text/javascript" src='https://riino.site/jekyll-search-bar/search/js/search.js'></script>
-<script>$(document).ready(function () {$('.document').append(searchBarHtml(https://riino.site));})</script>
+<script>$(document).ready(function () {$('.document').append(searchBarHtml('https://riino.site'));})</script>
 ```
 
 or if you fork/download this repo and upload it into your server:

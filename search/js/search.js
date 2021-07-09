@@ -9,12 +9,12 @@ function searchBarHtml(domain) {
   </div>
 
   <div style="position: fixed; top: 16px; right: 16px;">
-      <img src="${articleProps}/jekyll-search-bar/search/img/cb-close.png" id="cb-close-btn" />
+      <img src="${domain}/jekyll-search-bar/search/img/cb-close.png" id="cb-close-btn" />
   </div>
 </div>
 
 <div style="position: fixed; right: 16px; bottom: 20px;">
-  <img src="${articleProps}/jekyll-search-bar/search/img/cb-search.png" id="cb-search-btn" title="Try Double Click Ctrl" />
+  <img src="${domain}/jekyll-search-bar/search/img/cb-search.png" id="cb-search-btn" title="Try Double Click Ctrl" />
 </div>
 
 
