@@ -185,7 +185,7 @@
 
         $.ajax({
             type: "GET",
-            url: "/search/dpds-search.json",
+            url: "/search.json",
             success: function (result) {
                 updateTypehead(result.data);
             },
