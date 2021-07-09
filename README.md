@@ -13,11 +13,15 @@ Copy `search.json` file into your jekyll root
 
 Using `{% include search.html %}` in your layouts. 
 
-## Install via riino.site
+## Install via GithubPage
+
+*If you use these mode, please check CORE issue. Currently all assets are available in https://riino.site/jekyll-search-bar
+
+A typical request url could be https://riino.site/jekyll-search-bar/search/js/search.js, if you desire same domain request, **fork** this repo and host it in your server or GithubPage.
 
 ### Step 1:
 
-Create `search.json` in your root:
+Create a `search.json` in your root:
 
 ```
 {%raw%}
@@ -43,6 +47,23 @@ layout: null
 ```
 
 ### Step 2:
+
+Copy these code into your jekyll html page (if use riino.site source)
+
 ```
-<script type="text/javascript" src='https://riino.site/jekyll-search-bar/search/js/jekyll-search-bar.js'></script>
+<link rel="stylesheet" href="https://riino.site/jekyll-search-bar/search/css/search.css">
+<script type="text/javascript" src='https://riino.site/jekyll-search-bar/search/js/typeahead.bundle.js'></script>
+<script type="text/javascript" src='https://riino.site/jekyll-search-bar/search/js/fuzzyset.js'></script>
+<script type="text/javascript" src='https://riino.site/jekyll-search-bar/search/js/search.js'></script>
+<script>$(document).ready(function () {$('.document').append(searchBarHtml(https://riino.site));})</script>
+```
+
+or if you fork/download this repo and upload it into your server:
+
+```
+<link rel="stylesheet" href="<your-domain>/jekyll-search-bar/search/css/search.css">
+<script type="text/javascript" src='<your-domain>/jekyll-search-bar/search/js/typeahead.bundle.js'></script>
+<script type="text/javascript" src='<your-domain>/jekyll-search-bar/search/js/fuzzyset.js'></script>
+<script type="text/javascript" src='<your-domain>/jekyll-search-bar/search/js/search.js'></script>
+<script>$(document).ready(function () {$('.document').append(searchBarHtml());})</script>
 ```
