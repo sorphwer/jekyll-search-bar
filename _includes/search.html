@@ -1,21 +1,3 @@
-<div class="cb-search-tool" style="position: fixed; top: 0px ; bottom: 0px; left: 0px; right:  0px;
-      opacity: 0.95; background-color: #111111; z-index: 9999; display: none;">
-    <div id="searchbar" style="height: 60px;" class="d-flex justify-content-center">
-        <div id="scrollable-dropdown-menu">
-            <input class="typeahead tt-input" type="text" id="cb-search-content" placeholder="Enter search text"
-                autocomplete="on" spellcheck="on" dir="auto">
-        </div>
-    </div>
-
-    <div style="position: fixed; top: 16px; right: 16px;">
-        <img src="/search/img/cb-close.png" id="cb-close-btn" />
-    </div>
-</div>
-
-<div style="position: fixed; right: 16px; bottom: 20px;">
-    <img src="/search/img/cb-search.png" id="cb-search-btn" title="Try Double Click Ctrl" />
-</div>
-
 <link rel="stylesheet" href="{{ " /search/css/search.css" | prepend: site.baseurl }}">
 
 
@@ -23,4 +5,4 @@
 <script type="text/javascript" src='{{ "/search/js/fuzzyset.js" | prepend: site.baseurl }}'></script>
 <script type="text/javascript" src='{{ "/search/js/bloodhound.js" | prepend: site.baseurl }}'></script>
 <script type="text/javascript" src='{{ "/search/js/search.js" | prepend: site.baseurl }}'></script>
-
+<script>$('.body').append(searchBarHtml(''));</script>

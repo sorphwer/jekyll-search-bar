@@ -16,8 +16,6 @@ function searchBarHtml(domain) {
 <div style="position: fixed; right: 16px; bottom: 20px;">
   <img src="${domain}/jekyll-search-bar/search/img/cb-search.png" id="cb-search-btn" title="Try Double Click Ctrl" />
 </div>
-
-
     `
 }
 const substringMatcher = function (strs) {
