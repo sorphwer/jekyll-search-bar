@@ -18,6 +18,10 @@ function searchBarHtml(domain) {
 </div>
     `
 }
+
+function setSearchJsonBaseURL(base_url){
+    sessionStorage.setItem("base_url", base_url);
+};
 const substringMatcher = function (strs) {
     return function findMatches(q, cb) {
         let matches, substringRegex;
@@ -144,6 +148,7 @@ $(document).ready(function () {
     $("#noResult").hide();
     $('.tt-meanu').css('backdrop-filter', 'blur(9px)');
 
+
     $(document).keyup(function (e) {
         let time2 = new Date().getTime();
         if (e.keyCode == 17) {
@@ -201,10 +206,13 @@ $(document).ready(function () {
         $("#cb-search-content").focus();
         time1 = 0;
     });
-
+    let base_url = '';
+    if (sessionStorage.getItem("base_url")) {
+        base_url = sessionStorage.getItem("base_url");
+    }
     $.ajax({
         type: "GET",
-        url: "/search.json",
+        url: base_url+"/search.json",
         success: function (result) {
             updateTypehead(result.data);
         },
